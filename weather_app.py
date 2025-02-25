@@ -1,14 +1,17 @@
+import os
 import streamlit as st
 import requests
 import datetime
+from dotenv import load_dotenv
 
-API_KEY = "4190189464944ecf9995818b0d3e3854"
+load_dotenv()
+API_KEY = os.getenv("WEATHER_API_KEY")
+
 
 st.set_page_config(page_title="Weather App", page_icon="🌤️", layout="centered")
 
 st.markdown(
     """
-    
     <style>
     .weather-container {
         max-width: 500px;
@@ -20,7 +23,7 @@ st.markdown(
         text-align: center;
     }
     .temperature {
-        font-size: 42px;
+        font-size: 45px!important;
         font-weight: bold;
         color: #ff7b00;
     }
@@ -51,7 +54,6 @@ if st.button("Get Weather"):
         url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric"
         response = requests.get(url)
         data = response.json()
-
         if data["cod"] == 200:
             sunrise = datetime.datetime.fromtimestamp(data['sys']['sunrise']).strftime('%I:%M %p')
             sunset = datetime.datetime.fromtimestamp(data['sys']['sunset']).strftime('%I:%M %p')
@@ -68,7 +70,5 @@ if st.button("Get Weather"):
             st.error("❌ City not found. Please try again.")
     else:
         st.warning("⚠️ Please enter a city name.")
-
-st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown('<p class="footer">Name: <b>Huzaifa</b> | Roll Number: <b>499351</b></p>', unsafe_allow_html=True)
